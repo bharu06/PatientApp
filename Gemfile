@@ -45,3 +45,5 @@ gem 'jquery-rails'
 
 
 gem 'bootstrap', '~> 4.0.0.alpha.3.1'
+
+gem 'react-rails'
