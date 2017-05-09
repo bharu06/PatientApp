@@ -4,7 +4,6 @@ class PatientsController < ApplicationController
   # GET /patients
   def index
     @patients = Patient.all
-    puts @patients.inspect
   end
 
   # GET /patients/1
@@ -54,6 +53,6 @@ class PatientsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def patient_params
-      params.fetch(:patient, {})
+      params.permit(:first_name, :last_name, :age, :dob, :gender, :phone, :extra_info)
     end
 end
