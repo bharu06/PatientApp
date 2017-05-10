@@ -4,15 +4,9 @@ class PatientsIndexView extends React.Component {
   }
   render () {
     return (
-      <div>
-        {
-          this.props.patients.map((patient) => {
-            return(
-              <h1> {patient.first_name} </h1>
-            );
-          })
-        }
-      </div>
+      <PatientsRenderView
+        patients={this.props.patients}
+      />
     );
   }
 }

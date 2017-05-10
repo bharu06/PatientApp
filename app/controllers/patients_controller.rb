@@ -23,10 +23,13 @@ class PatientsController < ApplicationController
   def create
     @patient = Patient.new(patient_params)
 
-    if @patient.save
-      redirect_to @patient, notice: 'Patient was successfully created.'
-    else
-      render :new
+    respond_to do |format|
+      if @patient.save
+        format.json { render json: @patient, status: :created, location: @patient }
+      else
+        Rails.logger.error "#{@patient.errors.inspect}"
+        format.json { render json: @patient.errors, status: :unprocessable_entity }
+      end
     end
   end
 

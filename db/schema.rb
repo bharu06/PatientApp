@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170508045754) do
+ActiveRecord::Schema.define(version: 20170509212047) do
 
   create_table "patients", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
     t.string   "first_name"
     t.string   "last_name"
     t.integer  "age"
     t.date     "dob"
     t.string   "gender"
-    t.integer  "phone"
+    t.integer  "phone",      limit: 8
     t.string   "extra_info"
   end
 
