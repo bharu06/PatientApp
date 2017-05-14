@@ -163,60 +163,83 @@ class PatientNewView extends React.Component {
   render () {
   let errors = this.getValidationErrors();
     return  (
-      <div className="panel-body">
+      <div className="container">
+      <div className="panel-body row body">
       {errors}
         <form className="" role="form" onSubmit={this.onSubmit}>
-          <div className="form-group form-group-default required">
-            <label> First Name :</label>
-            <input type="text" value={this.state.firstName} onChange={this.handleFirstNameChange} required/>
-          </div>
-          <div className="form-group form-group-default required">
-            <label> Last Name :</label>
-            <input type="text" value={this.state.lastName} onChange={this.handleLastNameChange} required/>
-          </div>
-          <div className="form-group form-group-default required">
-            <label> Age :</label>
-            <input type="number" step="1" value={this.state.age} onChange={this.handleAgeChange} required/>
-          </div>
-          <div className="form-group form-group-default required">
-            Gender :
-            <div className="">
-              <input
-                type="radio"
-                name="Female"
-                value="female"
-                onChange={this.handleGenderChange}
-                checked={this.state.gender === "female"}
-              /> Female
-            </div>
-            <div className="">
-              <input
-                type="radio"
-                name="Male"
-                value="male"
-                onChange={this.handleGenderChange}
-                checked={this.state.gender === "male"}
-              /> Male
-            </div>
-          </div>
-          <div className="form-group form-group-default required">
-            <label> Phone Number: </label>
-            <input type="tel" value={this.state.phone} onChange={this.handlePhoneNumberChange} required/>
-          </div>
-          <div className="form-group form-group-default required">
-            <label> Date Of Birth: </label>
-            <input type="date" value={this.state.dob} onChange={this.handleDOBChange} required/>
-          </div>
-          <div className="form-group form-group-default required">
-            <label> Extra Info: </label>
-            <input type="text" value={this.state.info} onChange={this.handleInfoChange} required/>
-          </div>
-          <div className="form-group text-right" >
-            <button type="submit" className="btn btn-primary btn-cons"> Submit </button>
-          </div>
+          <ul>
+            <li>
+              <div className="form-group form-group-default required left">
+                <label> First Name :</label>
+                <input type="text" value={this.state.firstName} onChange={this.handleFirstNameChange} required/>
+              </div>
+              <div className="form-group form-group-default required pull-right">
+                <label> Last Name :</label>
+                <input type="text" value={this.state.lastName} onChange={this.handleLastNameChange} required/>
+              </div>
+            </li>
+            <li>
+              <div className="form-group form-group-default required">
+                <label> Age :</label>
+                <input type="number" step="1" value={this.state.age} onChange={this.handleAgeChange} required/>
+              </div>
+            </li>
+            <li>
+              <div className="form-group form-group-default required">
+                <label> Gender : </label>
+                  <ul>
+                    <li>
+                      <div className="">
+                        <input
+                          type="radio"
+                          name="Female"
+                          value="female"
+                          onChange={this.handleGenderChange}
+                          checked={this.state.gender === "female"}
+                        /> Female
+                      </div>
+                    </li>
+                    <li>
+                      <div className="">
+                        <input
+                          type="radio"
+                          name="Male"
+                          value="male"
+                          onChange={this.handleGenderChange}
+                          checked={this.state.gender === "male"}
+                        /> Male
+                      </div>
+                    </li>
+                  </ul>
+              </div>
+            </li>
+            <li>
+              <div className="form-group form-group-default required">
+                <label> Phone Number: </label>
+                <input type="tel" value={this.state.phone} onChange={this.handlePhoneNumberChange} required/>
+              </div>
+            </li>
+            <li>
+              <div className="form-group form-group-default required">
+                <label> Date Of Birth: </label>
+                <input type="date" value={this.state.dob} onChange={this.handleDOBChange} required/>
+              </div>
+            </li>
+            <li>
+              <div className="form-group form-group-default required">
+                <label> Extra Info: </label>
+                <input type="text" value={this.state.info} onChange={this.handleInfoChange} required/>
+              </div>
+            </li>
+            <li>
+              <div className="form-group text-right" >
+                <button type="submit" className="btn btn-primary btn-cons"> Submit </button>
+              </div>
+            </li>
+          </ul>
         </form>
       </div>
-
+      </div>
     );
   }
 }
