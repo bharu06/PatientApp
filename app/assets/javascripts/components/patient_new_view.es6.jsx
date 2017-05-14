@@ -148,7 +148,7 @@ class PatientNewView extends React.Component {
         })
       },
       (data) => {
-        let url = window.location.origin + `/patients/${data.id}`;
+        let url = window.location.origin + `/patients`;
         window.location.href = url;
       },
       (error, json) => {
