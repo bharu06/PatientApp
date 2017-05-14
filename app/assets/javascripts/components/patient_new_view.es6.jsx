@@ -16,7 +16,8 @@ class PatientNewView extends React.Component {
       dobError: '',
       genderError: '',
       phoneError: '',
-      infoError: ''
+      infoError: '',
+      message: ''
     };
 
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
@@ -28,11 +29,22 @@ class PatientNewView extends React.Component {
     this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
     this.validateAll = this.validateAll.bind(this);
     this.getValidationErrors = this.getValidationErrors.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    this.createErrorDiv = this.createErrorDiv.bind(this);
+    this.getAge = this.getAge.bind(this);
+
+    //validation functions
+    this.validateFirstName = this.validateFirstName.bind(this);
+    this.validateLastName = this.validateLastName.bind(this);
+    this.validateAge = this.validateAge.bind(this);
+    this.validateDOB = this.validateDOB.bind(this);
+    this.validatePhone = this.validatePhone.bind(this);
+    this.validateInfo = this.validateInfo.bind(this);
+
+    this.onFinish = this.onFinish.bind(this);
   }
 
   handleFirstNameChange(e) {
-    this.setState({firstName: e.target.value});
+    this.setState({firstName: e.target.value}, ()=> {this.validateFirstName});
   }
 
   handleLastNameChange(e) {
@@ -52,138 +64,193 @@ class PatientNewView extends React.Component {
   }
 
   handleDOBChange(e) {
-    this.setState({ dob: e.target.value });
+    let age = this.getAge(e.target.value);
+    this.setState({
+      dob: e.target.value,
+      age: age
+    });
   }
 
   handleInfoChange(e) {
     this.setState({ info: e.target.value });
   }
 
+  getAge(dateString) {
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
   getValidationErrors () {
     let errors = [];
-    if (this.state.firstNameError.length > 0) {
-      errors.push(
-        <div className="alert alert-danger">
-          {this.state.firstNameError}
-          <button className="close" dataDismiss="alert"></button>
-        </div>
-       );
-    }
-    if (this.state.lastNameError.length > 0) {
-    errors.push(
-      <div className="alert alert-danger">
-        {this.state.lastNameError}
-        <button className="close" dataDismiss="alert"></button>
-      </div>
-     );
-    }
-    if(this.state.ageError.length > 0) {
-    errors.push(
-        <div className="alert alert-danger">
-          {this.state.ageError}
-          <button className="close" dataDismiss="alert"></button>
-        </div>
-       );
-    }
-    if (this.state.phoneError.length > 0) {
-    errors.push(
-        <div className="alert alert-danger">
-          {this.state.phoneError}
-          <button className="close" dataDismiss="alert"></button>
-        </div>
-       );
-    }
-
+    errors.push(this.createErrorDiv(errors, this.state.firstNameError));
+    errors.push(this.createErrorDiv(errors, this.state.lastNameError));
+    errors.push(this.createErrorDiv(errors, this.state.ageError));
+    errors.push(this.createErrorDiv(errors, this.state.dobError));
+    errors.push(this.createErrorDiv(errors, this.state.phoneError));
+    errors.push(this.createErrorDiv(errors, this.state.infoError));
+    console.log(errors);
     return errors;
   }
 
-  validateAll() {
-
-    let firstNameError = null;
-    let lastNameError = null;
-    let ageError = null;
-    let phoneError = null;
-    let flag = 0;
-    if (this.state.first_name.length === 0) {
-      firstNameError = "please enter first name";
-      flag =1;
+  createErrorDiv(errors, errorMessage) {
+    if(errorMessage != ""){
+      return (
+        <div className="alert alert-danger alert-dismissable">
+           {errorMessage}
+        </div>
+      );
     }
-    if (this.state.last_name.length === 0) {
-      lastNameError = "Please enter last name";
-      flag =1;
-    }
-    if (this.state.age === 0) {
-      ageError = "please enter age";
-      flag =1;
-    }
-    if (this.state.phone.length === 0){
-      phoneError = "please enter phone number";
-      flag =1;
-    }
-    this.setState({
-      firtNameError: firstNameError,
-      lastNameError: lastNameError,
-      ageError: ageError,
-      phoneError: phoneError
-    });
-
   }
 
-  onSubmit(e) {
-    let url = window.location.origin + '/patients';
-    let method = "POST";
+  validateFirstName() {
+    let error = "", validation = false;
+    if (this.state.firstName.length === 0) {
+      error = "Please enter a valid first name";
+      validation = true;
+    }
+    this.setState({ firstNameError: error });
+    return validation;
+  }
 
-    ajaxCall(
-      {
-        url,
-        method: method,
-        data: JSON.stringify({
-          first_name: this.state.firstName,
-          last_name: this.state.lastName,
-          age: this.state.age,
-          dob: this.state.dob,
-          gender: this.state.gender,
-          phone: this.state.phone,
-          extra_info: this.state.info
-        })
-      },
-      (data) => {
-        let url = window.location.origin + `/patients`;
-        window.location.href = url;
-      },
-      (error, json) => {
-        console.log(error);
-        alert("patient crreation unsuccessfull");
-      }
-    );
+  validateLastName() {
+    let error = "", validation = false;
+    if (this.state.lastName.length === 0) {
+      error = "Please enter a valid last name";
+      validation = true;
+    }
+    this.setState({ lastNameError: error });
+    return validation;
+  }
+
+  validateAge() {
+    let error = "", validation = false;
+    if (!this.state.age || this.state.age < 0) {
+      error = "Please enter a valid age";
+      validation = true;
+    }
+    this.setState({ ageError: error });
+    return validation;
+  }
+
+  validateDOB() {
+    let error = "", validation = false;
+    if (this.state.dob.length === 0) {
+      error = "Please enter a valid date of birth";
+      validation = true;
+    }
+    this.setState({ dobError: error });
+    return validation;
+  }
+
+  validatePhone() {
+    let error = "", validation = false;
+    if (!this.state.phone || this.state.phone.length < 6 || this.state.phone.length === 0) {
+      error = "Please enter a valid Phone Number";
+      validation = true;
+    }
+    this.setState({ phoneError: error });
+    return validation;
+  }
+
+  validateInfo() {
+    let error = "", validation = false;
+    if (this.state.info.length === 0) {
+      error = "Please enter a valid info";
+      validation = true;
+    }
+    this.setState({ infoError: error });
+    return validation;
+  }
+
+  validateAll() {
+    let check = this.validateFirstName();
+    check = this.validateLastName();
+    check = this.validateDOB();
+    check = this.validatePhone();
+    check = this.validateAge();
+    check = this.validateInfo();
+
+    if (!this.validateFirstName() &&
+        !this.validateLastName() &&
+        !this.validateDOB() &&
+        !this.validateAge() &&
+        !this.validatePhone() &&
+        !this.validateInfo()) {
+        return true;
+        } else {
+        return false;
+        }
+  }
+
+  onFinish() {
+    if (this.validateAll()) {
+      let url = window.location.origin + '/patients';
+      let method = "POST";
+
+      ajaxCall(
+        {
+          url,
+          method: method,
+          data: JSON.stringify({
+            first_name: this.state.firstName,
+            last_name: this.state.lastName,
+            age: this.state.age,
+            dob: this.state.dob,
+            gender: this.state.gender,
+            phone: this.state.phone,
+            extra_info: this.state.info
+          })
+        },
+        (data) => {
+          let url = window.location.origin + `/patients`;
+          window.location.href = url;
+        },
+        (error, json) => {
+          alert("patient creation unsucessful");
+        }
+      );
+    }
+
   }
 
   render () {
   let errors = this.getValidationErrors();
     return  (
       <div className="container">
-      <div className="panel-body row body">
       {errors}
-        <form className="" role="form" onSubmit={this.onSubmit}>
+      <div className="panel-body row body">
+        <form className="" role="form" noValidate>
           <ul>
             <li>
-              <div className="form-group form-group-default required left">
+              <div className="">
                 <label> First Name :</label>
-                <input type="text" value={this.state.firstName} onChange={this.handleFirstNameChange} required/>
+                <input type="text" value={this.state.firstName} placeholder="Ex.John" onChange={this.handleFirstNameChange} required/>
               </div>
-              <div className="form-group form-group-default required pull-right">
+              <div className="">
                 <label> Last Name :</label>
-                <input type="text" value={this.state.lastName} onChange={this.handleLastNameChange} required/>
+                <input type="text" value={this.state.lastName} placeholder="Ex.Deo"onChange={this.handleLastNameChange} required/>
               </div>
             </li>
             <li>
-              <div className="form-group form-group-default required">
+              <div className="">
+                <label> Date Of Birth: </label>
+                <input type="date" value={this.state.dob} onChange={this.handleDOBChange} required/>
+              </div>
+            </li>
+            <li>
+              <div className="">
                 <label> Age :</label>
                 <input type="number" step="1" value={this.state.age} onChange={this.handleAgeChange} required/>
               </div>
             </li>
             <li>
-              <div className="form-group form-group-default required">
+              <div className="">
                 <label> Gender : </label>
                   <ul>
                     <li>
@@ -212,26 +279,20 @@ class PatientNewView extends React.Component {
               </div>
             </li>
             <li>
-              <div className="form-group form-group-default required">
+              <div className="">
                 <label> Phone Number: </label>
                 <input type="tel" value={this.state.phone} onChange={this.handlePhoneNumberChange} required/>
               </div>
             </li>
             <li>
-              <div className="form-group form-group-default required">
-                <label> Date Of Birth: </label>
-                <input type="date" value={this.state.dob} onChange={this.handleDOBChange} required/>
-              </div>
-            </li>
-            <li>
-              <div className="form-group form-group-default required">
+              <div className="">
                 <label> Extra Info: </label>
                 <input type="text" value={this.state.info} onChange={this.handleInfoChange} required/>
               </div>
             </li>
             <li>
               <div className="form-group text-right" >
-                <button type="submit" className="btn btn-primary btn-cons"> Submit </button>
+                <button type="button" className="btn btn-primary btn-cons" onClick={this.onFinish}> Submit </button>
               </div>
             </li>
           </ul>
