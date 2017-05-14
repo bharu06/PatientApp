@@ -130,8 +130,6 @@ class PatientNewView extends React.Component {
   }
 
   onSubmit(e) {
-    this.validateAll();
-    e.preventDefault();
     let url = window.location.origin + '/patients';
     let method = "POST";
 
