@@ -9,7 +9,7 @@ class PatientsRenderView extends React.Component {
   render () {
     return (
     <div className="panel-body">
-      <div className="table-responsive">
+      <div className="table-responsive ">
       <ul>
       <div>
           <input
