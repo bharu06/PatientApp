@@ -8,7 +8,20 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-
+  <div>
+  <nav class="navbar navbar-default">
+  <div class="container-fluid">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="/">MedicalOffice</a>
+  </div>
+  <ul class="nav navbar-nav">
+    <li><a href="/">Home</a></li>
+    <li><a href="/patients/new">Create Patient</a></li>
+    <li><a href="/patients">See all Patients</a></li>
+  </ul>
+  </div>
+  </nav>
+  </div>
 <%= yield %>
 
 </body>
